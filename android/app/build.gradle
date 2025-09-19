@@ -60,6 +60,12 @@ react {
 def enableProguardInReleaseBuilds = false
 
 /**
+ * Set this to true to create separate APKs for each architecture.
+ * This can reduce the APK size but increases build time.
+ */
+def enableSeparateBuildPerCPUArchitecture = false
+
+/**
  * The preferred build flavor of JavaScriptCore (JSC)
  *
  * For example, to use the international variant, you can use:
@@ -72,10 +78,17 @@ def enableProguardInReleaseBuilds = false
  */
 def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
 
+/**
+ * Function to get React Native architectures
+ */
+def reactNativeArchitectures() {
+    def value = project.getProperties().get("reactNativeArchitectures")
+    return value ? value.split(",") : ["arm64-v8a", "armeabi-v7a", "x86", "x86_64"]
+}
+
 android {
-    ndkVersion rootProject.ext.ndkVersion
+    compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
-    compileSdk rootProject.ext.compileSdkVersion
 
     namespace "com.tslinesapp"
     defaultConfig {
@@ -85,6 +98,17 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    
+    // 手動添加字型文件配置
+    sourceSets {
+    main {
+        assets.srcDirs += [
+            'src/main/assets',
+            '../../node_modules/react-native-vector-icons/Fonts/',
+        ]
+    }
+}
+
     signingConfigs {
         debug {
             storeFile file('debug.keystore')
@@ -93,13 +117,21 @@ android {
             keyPassword 'android'
         }
     }
+
+    splits {
+        abi {
+            reset()
+            enable enableSeparateBuildPerCPUArchitecture
+            universalApk false
+            include (*reactNativeArchitectures())
+        }
+    }
+
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
         }
         release {
-            // Caution! In production, you need to generate your own keystore file.
-            // see https://reactnative.dev/docs/signed-apk-android.
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
@@ -117,3 +149,6 @@ dependencies {
         implementation jscFlavor
     }
 }
+
+// 註解掉有問題的 vector-icons gradle 腳本
+// apply from: file("../../node_modules/react-native-vector-icons/platforms/android/app.gradle")
