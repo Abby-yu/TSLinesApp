@@ -1,8 +1,4 @@
-
-// =====================================
-// src/screens/TelexReleaseScreen.tsx
-// =====================================
-
+// src/screens/TelexReleaseScreen.tsx (更新版本)
 import React, {useState} from 'react';
 import {
   View,
@@ -14,8 +10,10 @@ import {
   ScrollView,
   TextInput,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {telexApi} from '../services/telexApi';
 import styles from "../styles/common";
 
 type QueryType = 'bl' | 'container';
@@ -24,18 +22,54 @@ const TelexReleaseScreen: React.FC = () => {
   const navigation = useNavigation<any>();
   const [queryType, setQueryType] = useState<QueryType>('bl');
   const [inputValue, setInputValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (!inputValue.trim()) {
       Alert.alert('錯誤', '請輸入查詢號碼');
       return;
     }
+
+    // 目前API只支援BL Number查詢
+    if (queryType !== 'bl') {
+      Alert.alert('提示', '目前僅支援提單號碼查詢，貨櫃號碼查詢功能開發中');
+      return;
+    }
+
+    setIsLoading(true);
     
-    // 模擬查詢
-    navigation.navigate('TelexReleaseResult', {
-      queryType,
-      queryValue: inputValue,
-    });
+    try {
+      const response = await telexApi.queryTelexRelease(inputValue.trim().toUpperCase());
+      
+      if (response.docs && response.docs.length > 0) {
+        // 查詢成功，導航到結果頁面
+        navigation.navigate('TelexReleaseResult', {
+          queryType,
+          queryValue: inputValue.trim().toUpperCase(),
+          apiResponse: response,
+        });
+      } else {
+        // 沒有找到資料
+        Alert.alert(
+          '查詢結果',
+          '未找到相關電放資料，請檢查輸入的提單號碼是否正確。',
+          [
+            {text: '確定', style: 'default'}
+          ]
+        );
+      }
+    } catch (error) {
+      console.error('查詢失敗:', error);
+      Alert.alert(
+        '查詢失敗',
+        '網路連線異常或伺服器暫時無法回應，請稍後再試。',
+        [
+          {text: '確定', style: 'default'}
+        ]
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleRecentSearch = (value: string) => {
@@ -85,17 +119,29 @@ const TelexReleaseScreen: React.FC = () => {
             <TouchableOpacity
               style={[
                 styles.tab,
-                queryType === 'container' ? styles.activeTab : styles.inactiveTab
+                queryType === 'container' ? styles.activeTab : styles.inactiveTab,
+                queryType === 'container' && styles.disabledTab
               ]}
-              onPress={() => setQueryType('container')}>
+              onPress={() => {
+                Alert.alert('功能開發中', '貨櫃號碼查詢功能即將推出，目前請使用提單號碼查詢。');
+              }}>
               <Text style={styles.tabIcon}>📦</Text>
               <Text style={[
                 styles.tabText,
-                queryType === 'container' ? styles.activeTabText : styles.inactiveTabText
+                queryType === 'container' ? styles.activeTabText : styles.inactiveTabText,
+                queryType === 'container' && styles.disabledTabText
               ]}>
                 貨櫃號碼 Container No.
               </Text>
             </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* API Status Info */}
+        <View style={styles.apiStatusSection}>
+          <View style={styles.apiStatusCard}>
+            <Text style={styles.apiStatusIcon}>🔗</Text>
+            <Text style={styles.apiStatusText}>即時查詢德翔海運電放系統</Text>
           </View>
         </View>
 
@@ -107,29 +153,20 @@ const TelexReleaseScreen: React.FC = () => {
                 <Text style={styles.searchIcon}>🔍</Text>
               </View>
               <View>
-                <Text style={styles.inputTitle}>
-                  {queryType === 'bl' ? '提單號碼查詢' : '貨櫃號碼查詢'}
-                </Text>
-                <Text style={styles.inputSubtitle}>
-                  {queryType === 'bl' ? 'BL Number Query' : 'Container Number Query'}
-                </Text>
+                <Text style={styles.inputTitle}>提單號碼查詢</Text>
+                <Text style={styles.inputSubtitle}>BL Number Query</Text>
               </View>
             </View>
             
             <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>
-                {queryType === 'bl' ? '提單號碼 Bill of Lading Number' : '貨櫃號碼 Container Number'}
-              </Text>
+              <Text style={styles.inputLabel}>提單號碼 Bill of Lading Number</Text>
               <TextInput
                 style={styles.textInput}
                 value={inputValue}
                 onChangeText={setInputValue}
-                placeholder={
-                  queryType === 'bl' 
-                    ? '輸入提單號碼 (例: TSLU2024090001)' 
-                    : '輸入貨櫃號碼 (例: TSLU1234567)'
-                }
+                placeholder="輸入提單號碼 (例: 220010190069)"
                 autoCapitalize="characters"
+                editable={!isLoading}
               />
             </View>
 
@@ -137,19 +174,9 @@ const TelexReleaseScreen: React.FC = () => {
             <View style={styles.exampleSection}>
               <Text style={styles.exampleTitle}>格式範例：</Text>
               <View style={styles.exampleList}>
-                {queryType === 'bl' ? (
-                  <>
-                    <Text style={styles.exampleItem}>• TSLU2024090001</Text>
-                    <Text style={styles.exampleItem}>• TSHA240900001</Text>
-                    <Text style={styles.exampleItem}>• TSKE2024000123</Text>
-                  </>
-                ) : (
-                  <>
-                    <Text style={styles.exampleItem}>• TSLU1234567</Text>
-                    <Text style={styles.exampleItem}>• TSHA9876543</Text>
-                    <Text style={styles.exampleItem}>• TSKE5555555</Text>
-                  </>
-                )}
+                <Text style={styles.exampleItem}>• 220010190069</Text>
+                <Text style={styles.exampleItem}>• TSLU2024090001</Text>
+                <Text style={styles.exampleItem}>• TSHA240900001</Text>
               </View>
             </View>
           </View>
@@ -165,22 +192,24 @@ const TelexReleaseScreen: React.FC = () => {
             <View style={styles.recentList}>
               <TouchableOpacity 
                 style={styles.recentItem}
-                onPress={() => handleRecentSearch('TSLU2024080015')}>
+                onPress={() => handleRecentSearch('220010190069')}
+                disabled={isLoading}>
                 <View style={styles.recentItemContent}>
-                  <Text style={styles.recentItemNumber}>TSLU2024080015</Text>
-                  <Text style={styles.recentItemDate}>09/08</Text>
+                  <Text style={styles.recentItemNumber}>220010190069</Text>
+                  <Text style={styles.recentItemDate}>今天</Text>
                 </View>
                 <Text style={styles.recentItemStatus}>已電放 • Surrendered</Text>
               </TouchableOpacity>
               
               <TouchableOpacity 
                 style={styles.recentItem}
-                onPress={() => handleRecentSearch('TSHA1234567')}>
+                onPress={() => handleRecentSearch('TSLU2024080015')}
+                disabled={isLoading}>
                 <View style={styles.recentItemContent}>
-                  <Text style={styles.recentItemNumber}>TSHA1234567</Text>
-                  <Text style={styles.recentItemDate}>09/07</Text>
+                  <Text style={styles.recentItemNumber}>TSLU2024080015</Text>
+                  <Text style={styles.recentItemDate}>09/08</Text>
                 </View>
-                <Text style={styles.recentItemStatus}>處理中 • Processing</Text>
+                <Text style={styles.recentItemStatus}>查詢範例</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -189,13 +218,23 @@ const TelexReleaseScreen: React.FC = () => {
 
       {/* Search Button */}
       <View style={styles.searchButtonContainer}>
-        <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
-          <Text style={styles.searchButtonIcon}>🔍</Text>
-          <Text style={styles.searchButtonText}>查詢電放狀態</Text>
+        <TouchableOpacity 
+          style={[styles.searchButton, isLoading && styles.searchButtonDisabled]} 
+          onPress={handleSearch}
+          disabled={isLoading}>
+          {isLoading ? (
+            <ActivityIndicator color="white" size="small" />
+          ) : (
+            <Text style={styles.searchButtonIcon}>🔍</Text>
+          )}
+          <Text style={styles.searchButtonText}>
+            {isLoading ? '查詢中...' : '查詢電放狀態'}
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
 };
 
-export default TelexReleaseScreen;
+
+export default TelexReleaseScreen;  

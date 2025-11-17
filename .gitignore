@@ -1,10 +1,49 @@
+# ==============================================================
+# 1. 核心依賴及建構輸出 (Node.js/React Native)
+# ==============================================================
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+# 所有的編譯/輸出資料夾 (已在 iOS/Android 部分多次定義，但保留通用性)
+/build/
+/dist/
+/out/
+/coverage/
+*.jsbundle # Bundle artifact
+
+# Metro/Packager 相關
+.metro-health-check* # Temporary files created by Metro to check the health of the file watcher
+.haste_maps/         # React Native Metro bundler 的快取
+.expo/               # Expo 相關快取
+.react-native/
+
+# Yarn (保留您現有的精確 Yarn 規則)
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# ==============================================================
+# 2. 測試、報告及覆蓋率
+# ==============================================================
+/coverage # testing
+
+# Fastlane (保留您現有的 Fastlane 規則)
+**/fastlane/report.xml
+**/fastlane/Preview.html
+**/fastlane/screenshots
+**/fastlane/test_output
+
+# ==============================================================
+# 3. iOS/macOS/Ruby 相關檔案
+# ==============================================================
 # OSX
-#
 .DS_Store
 
-# Xcode
-#
-build/
+# Xcode 編譯輸出及暫存 (已包含您現有的所有規則並優化)
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -22,9 +61,16 @@ DerivedData
 *.xcuserstate
 **/.xcode.env.local
 
-# Android/IntelliJ
-#
-build/
+# CocoaPods & Ruby
+**/Pods/
+/vendor/bundle/
+# 額外添加 Pods 鎖定檔案
+pod-install.lock
+
+# ==============================================================
+# 4. Android/IntelliJ 相關檔案
+# ==============================================================
+# Android/IntelliJ (已包含您現有的所有規則並優化)
 .idea
 .gradle
 local.properties
@@ -34,42 +80,26 @@ local.properties
 *.keystore
 !debug.keystore
 .kotlin/
+# 額外添加 Android 的特定 build 資料夾 (如果沒有在頂層 build/ 中被忽略)
+/android/build/
+/android/app/build/
+/android/.externalNativeBuild/
+captures/
+/android/.gradle
+**/android/**/build/
 
-# node.js
-#
-node_modules/
-npm-debug.log
-yarn-error.log
+# ==============================================================
+# 5. 環境、編輯器及其他
+# ==============================================================
+# 環境變數 (重要，避免密鑰外洩)
+.env
+.env.local
+.env.*.local
 
-# fastlane
-#
-# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
-# screenshots whenever they are needed.
-# For more information about the recommended setup visit:
-# https://docs.fastlane.tools/best-practices/source-control/
+# 編輯器/IDE 檔案 (新增 VS Code 建議忽略)
+.vscode/
 
-**/fastlane/report.xml
-**/fastlane/Preview.html
-**/fastlane/screenshots
-**/fastlane/test_output
-
-# Bundle artifact
-*.jsbundle
-
-# Ruby / CocoaPods
-**/Pods/
-/vendor/bundle/
-
-# Temporary files created by Metro to check the health of the file watcher
-.metro-health-check*
-
-# testing
-/coverage
-
-# Yarn
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
+# 其他常見
+*.tmp
+temp/
+.bundle/

@@ -1,4 +1,3 @@
-
 // =====================================
 // src/screens/HomeScreen.tsx
 // =====================================
@@ -214,7 +213,5 @@ const HomeScreen: React.FC = () => {
     </SafeAreaView>
   );
 };
-
-
 
 export default HomeScreen;

@@ -4,7 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from './src/screens/HomeScreen';
 import TelexReleaseScreen from './src/screens/TelexReleaseScreen';
-import TelexReleaseResultScreen from './src/screens/TelexReleaseResultScreen';
+import { TelexReleaseResultScreen } from './src/screens/TelexReleaseResultScreen';
 import TelexReleaseDetailScreen from './src/screens/TelexReleaseDetailScreen';
 
 const Stack = createNativeStackNavigator();

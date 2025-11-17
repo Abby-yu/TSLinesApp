@@ -30,38 +30,38 @@ const styles = StyleSheet.create({
     color: 'rgba(255, 255, 255, 0.8)',
     marginTop: 2,
   },
-  backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  backButtonText: {
-    color: 'white',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  helpButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  helpButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
   content: {
     flex: 1,
     paddingHorizontal: 20,
   },
+  
+  // API Status Section
+  apiStatusSection: {
+    paddingTop: 16,
+    paddingBottom: 8,
+  },
+  apiStatusCard: {
+    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+    borderRadius: 12,
+    padding: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(59, 130, 246, 0.2)',
+  },
+  apiStatusIcon: {
+    fontSize: 16,
+    marginRight: 8,
+  },
+  apiStatusText: {
+    fontSize: 12,
+    color: '#1E40AF',
+    fontWeight: '500',
+  },
+  
+  // Tab Styles
   tabSection: {
-    paddingTop: 20,
+    paddingTop: 12,
     paddingBottom: 16,
   },
   tabContainer: {
@@ -90,6 +90,9 @@ const styles = StyleSheet.create({
   inactiveTab: {
     backgroundColor: 'rgba(255, 255, 255, 0.6)',
   },
+  disabledTab: {
+    backgroundColor: 'rgba(156, 163, 175, 0.3)',
+  },
   tabIcon: {
     fontSize: 16,
     marginRight: 8,
@@ -104,6 +107,11 @@ const styles = StyleSheet.create({
   inactiveTabText: {
     color: '#6B7280',
   },
+  disabledTabText: {
+    color: '#9CA3AF',
+  },
+  
+  // Input Section
   inputSection: {
     marginBottom: 20,
   },
@@ -180,6 +188,8 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#059669',
   },
+  
+  // Recent Section
   recentSection: {
     marginBottom: 100,
   },
@@ -236,6 +246,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#6B7280',
   },
+  
+  // Search Button
   searchButtonContainer: {
     position: 'absolute',
     bottom: 20,
@@ -255,6 +267,9 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 8,
   },
+  searchButtonDisabled: {
+    backgroundColor: '#9CA3AF',
+  },
   searchButtonIcon: {
     fontSize: 20,
     marginRight: 8,
@@ -263,42 +278,242 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     fontWeight: '600',
+    marginLeft: 8,
   },
   
-  // HomeScreen styles
-  welcomeSection: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 12,
-    marginTop: 20,
-    marginBottom: 20,
+  // Result Styles
+  summarySection: {
+    paddingTop: 16,
+    paddingBottom: 16,
+  },
+  summaryCard: {
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    borderRadius: 16,
+    padding: 16,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowRadius: 8,
+    elevation: 4,
   },
-  welcomeHeader: {
+  summaryHeader: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 12,
+    marginBottom: 8,
   },
-  welcomeEmoji: {
-    fontSize: 24,
-  },
-  welcomeTextContainer: {
-    flex: 1,
-  },
-  welcomeTitle: {
-    fontSize: 18,
-    fontWeight: '600',
+  summaryTitle: {
+    fontSize: 16,
+    fontWeight: '500',
     color: '#1F2937',
-    marginBottom: 5,
   },
-  welcomeSubtitle: {
+  statusBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  successBadge: {
+    backgroundColor: '#DCFCE7',
+  },
+  warningBadge: {
+    backgroundColor: '#FEF3C7',
+  },
+  statusBadgeText: {
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  successBadgeText: {
+    color: '#059669',
+  },
+  warningBadgeText: {
+    color: '#D97706',
+  },
+  summaryText: {
     fontSize: 14,
     color: '#6B7280',
   },
+  summaryValue: {
+    fontWeight: '500',
+    color: '#1F2937',
+  },
+
+  // Result Section
+  resultSection: {
+    marginBottom: 16,
+  },
+  resultCard: {
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    borderRadius: 16,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  statusHeader: {
+    padding: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  successHeader: {
+    backgroundColor: '#10B981',
+  },
+  warningHeader: {
+    backgroundColor: '#F59E0B',
+  },
+  statusContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  checkIcon: {
+    fontSize: 24,
+    color: 'white',
+    marginRight: 12,
+  },
+  statusTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: 'white',
+  },
+  statusSubtitle: {
+    fontSize: 12,
+    color: 'rgba(255, 255, 255, 0.8)',
+  },
+  statusMark: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  masterInfo: {
+    padding: 20,
+  },
+  infoGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 16,
+  },
+  infoItem: {
+    width: '45%',
+  },
+  infoLabel: {
+    fontSize: 12,
+    color: '#6B7280',
+    marginBottom: 4,
+  },
+  infoValue: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#1F2937',
+  },
+  infoSubValue: {
+    fontSize: 12,
+    color: '#6B7280',
+  },
+  statusValue: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  successText: {
+    color: '#059669',
+  },
+  warningText: {
+    color: '#D97706',
+  },
+  releaseInfo: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 16,
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: '#E5E7EB',
+  },
+  releaseLabel: {
+    fontSize: 12,
+    color: '#6B7280',
+  },
+  releaseValue: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#1F2937',
+  },
+  notesInfo: {
+    marginTop: 12,
+    padding: 12,
+    backgroundColor: '#FEF3C7',
+    borderRadius: 8,
+  },
+  notesLabel: {
+    fontSize: 12,
+    color: '#92400E',
+    fontWeight: '500',
+    marginBottom: 4,
+  },
+  notesValue: {
+    fontSize: 13,
+    color: '#78350F',
+    lineHeight: 18,
+  },
+
+  // Container Section
+  containerSection: {
+    marginBottom: 20,
+  },
+  containerCard: {
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    borderRadius: 16,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  containerHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  containerIcon: {
+    fontSize: 20,
+    marginRight: 8,
+  },
+  containerTitle: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#1F2937',
+  },
+  infoList: {
+    gap: 12,
+  },
+  infoRow: {
+    flexDirection: 'row',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(229, 231, 235, 0.5)',
+  },
+  infoRowLabel: {
+    fontSize: 14,
+    color: '#6B7280',
+    width: 100,
+    fontWeight: '500',
+  },
+  infoRowValue: {
+    fontSize: 14,
+    color: '#1F2937',
+    flex: 1,
+  },
+  noInfoText: {
+    fontSize: 14,
+    color: '#6B7280',
+    textAlign: 'center',
+    fontStyle: 'italic',
+    paddingVertical: 20,
+  },
+
+  // Services Section
   servicesSection: {
     marginBottom: 20,
   },
@@ -345,6 +560,109 @@ const styles = StyleSheet.create({
     color: '#6B7280',
     textAlign: 'center',
   },
+
+  // Welcome Section
+  welcomeSection: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 12,
+    marginTop: 20,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  welcomeHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  welcomeEmoji: {
+    fontSize: 24,
+  },
+  welcomeTextContainer: {
+    flex: 1,
+  },
+  welcomeTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#1F2937',
+    marginBottom: 5,
+  },
+  welcomeSubtitle: {
+    fontSize: 14,
+    color: '#6B7280',
+  },
+
+
+
+  // Button Styles
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  backButtonText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  anchorButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  helpButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  helpButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  exportButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  exportButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  shareButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  shareButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+
+
+  
+  // Schedule Button
   scheduleButton: {
     backgroundColor: '#4A6CF7',
     flexDirection: 'row',
@@ -375,17 +693,12 @@ const styles = StyleSheet.create({
   scheduleEmoji: {
     fontSize: 28,
   },
-  anchorButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   anchorEmoji: {
     fontSize: 20,
-  }});
+  },
+
+
+});
 
 
 export default styles;
